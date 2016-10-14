@@ -19,7 +19,7 @@ namespace GameProgramSub1
         /*コンストラクタ*/
         public Quaternion()
         {
-            w = 0;
+            w = 1.0; // 回転に使うことが多いので1(回転角度0)に設定しておいた方がいい
             v = Vector3.zero;
         }
         public Quaternion(float w, float x, float y, float z)
@@ -59,7 +59,7 @@ namespace GameProgramSub1
 
         /*メソッド*/
         //共役
-        public Quaternion GetConjugate(Quaternion q)
+        public static Quaternion GetConjugate(Quaternion q)
         {
             return new Quaternion(q.w, v * -1);
         }
@@ -77,7 +77,7 @@ namespace GameProgramSub1
             //r* = (cosθ/2, v-sinθ/2)
             Quaternion r = new Quaternion((float)Math.Cos(theta / 2), axis * (float)Math.Sin(theta / 2));
 
-            return this * r * GetConjugate(r);
+            return r * this * GetConjugate(r);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace GameProgramSub1
         /// <param name="theta">回転量(弧度)</param>
         /// <param name="axis">回転軸(単位ベクトル)</param>
         /// <param name="q">回転させたいQuaternion</param>
-        public Quaternion Rotation(float theta, Vector3 axis,Quaternion q)
+        public static Quaternion Rotation(float theta, Vector3 axis, Quaternion q)
         {
             //q'= rqr*
             //q = (w, X)
@@ -94,7 +94,7 @@ namespace GameProgramSub1
             //r* = (cosθ/2, v-sinθ/2)
             Quaternion r = new Quaternion((float)Math.Cos(theta / 2), axis * (float)Math.Sin(theta / 2));
 
-            return q * r * GetConjugate(r);
+            return r * q * GetConjugate(r);
         }
 
         //内積
